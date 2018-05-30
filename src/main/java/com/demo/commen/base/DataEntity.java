@@ -1,6 +1,9 @@
 package com.demo.commen.base;
 
+import com.demo.modules.sys.entity.User;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
+import java.util.Date;
 
 public class DataEntity<T> extends BaseEntity<T> {
 
@@ -13,10 +16,46 @@ public class DataEntity<T> extends BaseEntity<T> {
     public static final String DEL_FLAG_AUDIT = "2";
 
     private static final long serialVersionUID = 1L;
-
+    protected User createBy;	// 创建者
+    protected Date createDate;	// 创建日期
+    protected User updateBy;	// 更新者
+    protected Date updateDate;	// 更新日期
     protected String remarks;
 
     protected String delFlag;
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public User getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(User updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+
 
     public DataEntity() {
         super();
