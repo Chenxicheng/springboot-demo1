@@ -12,4 +12,25 @@ public interface UserDao extends CrudDao<User> {
      * @return
      */
     User getByLoginName(User user);
+
+    /**
+     *
+     * @param user
+     */
+    void deleteUserRole(User user);
+
+    /**
+     *
+     * @param user
+     */
+    void insertUserRole (User user);
+
+    /**
+     * 更新密码
+     * @param user
+     */
+    void updatePasswordById (User user);
+
+    void updateUserInfo (User user);
+
 }

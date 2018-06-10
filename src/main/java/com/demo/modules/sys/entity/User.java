@@ -1,6 +1,9 @@
 package com.demo.modules.sys.entity;
 
 import com.demo.commen.base.DataEntity;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 public class User extends DataEntity<User> {
 
@@ -9,6 +12,10 @@ public class User extends DataEntity<User> {
     private String name;
     private String loginName;
     private String password;
+    private String phone;
+
+    private List<Role> roleList = Lists.newArrayList();
+
 
     public User() {
         super();
@@ -41,4 +48,22 @@ public class User extends DataEntity<User> {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+
 }

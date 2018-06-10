@@ -3,16 +3,17 @@
 <mapper namespace="com.demo.modules.sys.dao.UserDao">
 	
     <sql id="userColumns">
-    	a.id id,
-    	a.name name,
-    	a.login_name loginName,
-    	a.password password,
-    	a.create_date createDate,
-    	a.create_by createBy.id,
-    	a.update_date updateDate,
-    	a.update_by updateBy.id,
-    	a.remarks remarks,
-    	a.del_flag delFlag
+    	a.id AS "id",
+    	a.name AS "name",
+    	a.login_name AS "loginName",
+    	a.password AS "password",
+    	a.phone AS "phone",
+    	a.create_date AS "createDate",
+    	a.create_by AS "createBy.id",
+    	a.update_date AS "updateDate",
+    	a.update_by AS "updateBy.id",
+    	a.remarks AS "remarks",
+    	a.del_flag AS "delFlag"
     </sql>
     
     <sql id="userJoins">
@@ -129,106 +130,60 @@
 	<!-- 插入用户 -->
 	<insert id="insert">
 		INSERT INTO sys_user(
-			id, 
--- 			company_id,
--- 			office_id,
+			id,
 			login_name,
 			password,
--- 			no,
-			name, 
--- 			email,
--- 			phone,
--- 			mobile,
--- 			user_type,
--- 			create_by,
--- 			create_date,
--- 			update_by,
--- 			update_date,
--- 			remarks,
--- 			login_flag,
--- 			photo,
--- 			qrcode,
+			name,
+			phone,
 			del_flag
 		) VALUES (
-			#{id}, 
--- 			#{company.id},
--- 			#{office.id},
+			#{id},
 			#{loginName}, 
-			#{password}, 
--- 			#{no},
-			#{name}, 
--- 			#{email},
--- 			#{phone},
--- 			#{mobile},
--- 			#{userType},
--- 			#{createBy.id},
--- 			#{createDate},
--- 			#{updateBy.id},
--- 			#{updateDate},
--- 			#{remarks},
--- 			#{loginFlag},
--- 			#{photo},
--- 			#{qrCode},
+			#{password},
+			#{name},
+			#{phone},
 			#{delFlag}
 		)
 	</insert>
 	
 	<!-- 更新用户 -->
 	<update id="update">
-		UPDATE sys_user SET 
-			company_id = #{company.id}, 
-			office_id = #{office.id}, 
+		UPDATE sys_user SET
 			login_name = #{loginName}, 
-			password = #{password}, 
-			no = #{no}, 
-			name = #{name}, 
-			email = #{email}, 
-			phone = #{phone}, 
-			mobile = #{mobile}, 
-			user_type = #{userType}, 
-			update_by = #{updateBy.id}, 
-			update_date = #{updateDate}, 
-			remarks = #{remarks},
-			login_flag = #{loginFlag},
-			photo = #{photo},
-			qrcode = #{qrCode}
+			password = #{password},
+			name = #{name},
+			phone = #{phone}
 		WHERE id = #{id}
 	</update>
 	
 	<!-- 删除用户和角色关联表数据 -->
-	<!--<delete id="deleteUserRole">-->
-		<!--DELETE FROM sys_user_role WHERE user_id = #{id}-->
-	<!--</delete>-->
+	<delete id="deleteUserRole">
+		DELETE FROM user_role WHERE user_id = #{id}
+	</delete>
 	
 	<!-- 插入用户和角色关联表数据 -->
-	<!--<insert id="insertUserRole">-->
-		<!--INSERT INTO sys_user_role(user_id, role_id)-->
-		<!--<foreach collection="roleList" item="role" separator=" union all ">-->
-			<!--SELECT #{id}, #{role.id} FROM dual-->
-		<!--</foreach>-->
-	<!--</insert>-->
+	<insert id="insertUserRole">
+		INSERT INTO user_role(user_id, role_id)
+		<foreach collection="roleList" item="role" separator=" union all ">
+			SELECT #{id}, #{role.id} FROM dual
+		</foreach>
+	</insert>
 	
 	<!-- 更新用户信息  -->
-	<!--<update id="updateUserInfo">-->
-		<!--UPDATE sys_user SET -->
-			<!--name = #{name},-->
-			<!--email = #{email}, -->
-			<!--phone = #{phone}, -->
-			<!--mobile = #{mobile}, -->
-			<!--update_by = #{updateBy.id}, -->
-			<!--update_date = #{updateDate}, -->
-			<!--remarks = #{remarks},-->
-			<!--photo = #{photo},-->
-			<!--qrcode = #{qrCode}-->
-		<!--WHERE id = #{id}-->
-	<!--</update>-->
+	<update id="updateUserInfo">
+		UPDATE sys_user SET
+			name = #{name},
+			phone = #{phone},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
 	
 	<!-- 更新用户密码 -->
-	<!--<update id="updatePasswordById">-->
-		<!--UPDATE sys_user SET -->
-			<!--password = #{password} -->
-		<!--WHERE id = #{id}-->
-	<!--</update>-->
+	<update id="updatePasswordById">
+		UPDATE sys_user SET
+			password = #{password}
+		WHERE id = #{id}
+	</update>
 	
 	<!-- 更新登录信息，如登录IP、登录时间 -->
 	<!--<update id="updateLoginInfo">-->

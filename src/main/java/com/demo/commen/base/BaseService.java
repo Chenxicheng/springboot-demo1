@@ -13,6 +13,10 @@ public interface BaseService <T extends DataEntity<T>> {
 
     void save(T t);
 
+    void insert(T t);
+
+    void update(T t);
+
     void delete(T t);
 
     void delete(String id);

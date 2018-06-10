@@ -1,5 +1,6 @@
 package com.demo.commen.base;
 
+import com.demo.commen.utils.IdGen;
 import com.demo.modules.sys.entity.User;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -57,6 +58,8 @@ public class DataEntity<T> extends BaseEntity<T> {
 
 
 
+
+
     public DataEntity() {
         super();
         this.delFlag = DEL_FLAG_NORMAL;
@@ -81,6 +84,15 @@ public class DataEntity<T> extends BaseEntity<T> {
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public void preInsert() {
+        Date now = new Date();
+
+        this.id = IdGen.uuid();
+
+        this.createDate = now;
+        this.updateDate = now;
     }
 
     @Override
