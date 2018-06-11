@@ -25,3 +25,8 @@ mybatis:
   type-aliases-package: com.demo.modules
 
 
+jwt:
+  expirationtime: 432_000_000
+  secret: dashwood
+
+
