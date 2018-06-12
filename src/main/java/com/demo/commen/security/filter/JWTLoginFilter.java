@@ -38,8 +38,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         // JSON反序列化成 AccountCredentials
 //        AccountCredentials creds = JSON.new ObjectMapper().readValue(req.getInputStream(), AccountCredentials.class);
 
-        String v = IOUtils.toString(req.getInputStream(), "UTF-8");
-        JSONObject json = JSON.parseObject(IOUtils.toString(req.getInputStream(), "UTF-8"));
+        String v = IOUtils.toString(req.getInputStream(), "UTF-8").replaceAll("\t", "").replaceAll("\n","");
+        JSONObject json = JSON.parseObject(v);
 
         System.out.println(json.toString());
         // 返回一个验证令牌

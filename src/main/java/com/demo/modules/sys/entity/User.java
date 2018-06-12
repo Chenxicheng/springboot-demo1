@@ -13,6 +13,7 @@ public class User extends DataEntity<User> {
     private String loginName;
     private String password;
     private String phone;
+    private String email;
 
     private List<Role> roleList = Lists.newArrayList();
 
@@ -65,5 +66,11 @@ public class User extends DataEntity<User> {
         this.roleList = roleList;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
