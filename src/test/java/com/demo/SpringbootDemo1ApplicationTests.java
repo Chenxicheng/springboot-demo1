@@ -40,7 +40,7 @@ public class SpringbootDemo1ApplicationTests {
 
 		User user = new User();
 
-		user.setLoginName("admin");
+		user.setUsername("admin");
 		user.setPassword("admin");
 
 		boolean flag = userService.verifyUserByLoginName(user);
@@ -57,10 +57,10 @@ public class SpringbootDemo1ApplicationTests {
 
 	@Test
 	public void test2() {
-		Role role = new Role();
-		role.setName("commen_user");
-		role.setCnName("普通用户");
-		roleService.insert(role);
+		User u = new User();
+		u.setId("1");
+		u.setPassword("admin");
+		userService.updatePassword(u);
 
 	}
 }

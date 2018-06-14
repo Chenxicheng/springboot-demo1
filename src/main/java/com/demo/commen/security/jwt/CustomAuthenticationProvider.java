@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         User user = new User();
-        user.setLoginName(name);
+        user.setUsername(name);
         user.setPassword(password);
         boolean isLoginUser = userService.verifyUserByLoginName(user);
         // 认证逻辑

@@ -6,6 +6,7 @@ import com.demo.modules.sys.dao.UserDao;
 import com.demo.modules.sys.entity.User;
 import com.demo.modules.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,9 +55,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     public void insert(User user) {
-        String md5Pwd = EncryptionUtils.md5(User.SALT+user.getPassword());
 
-        user.setPassword(md5Pwd);
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         user.preInsert();
         userDao.insert(user);
@@ -75,9 +75,9 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
 
         if (StringUtils.isNotBlank(user.getPassword())) {
-            String md5Pwd = EncryptionUtils.md5(User.SALT+user.getPassword());
 
-            user.setPassword(md5Pwd);
+
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
             userDao.updatePasswordById(user);
         }
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean verifyUserByLoginName(User user) {
 
-        User dataUser = userDao.getByLoginName(user);
+        User dataUser = userDao.getByUsername(user);
 
         if (dataUser != null) {
             String md5Pwd = EncryptionUtils.md5(User.SALT+user.getPassword());
@@ -119,5 +119,25 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateUserInfoWithoutPwd(User user) {
+        userDao.updateUserInfo(user);
+
+        userDao.deleteUserRole(user);
+
+        if (user.getRoleList() != null && user.getRoleList().size() > 0) {
+            userDao.insertUserRole(user);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updatePassword(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+
+        userDao.updatePasswordById(user);
     }
 }

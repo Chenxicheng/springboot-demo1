@@ -5,7 +5,7 @@
     <sql id="userColumns">
     	a.id AS "id",
     	a.name AS "name",
-    	a.login_name AS "loginName",
+    	a.username AS "username",
     	a.password AS "password",
     	a.phone AS "phone",
     	a.create_date AS "createDate",
@@ -29,12 +29,12 @@
 	</select>
 	
 	<!-- 根据登录名查询用户 -->
-	<select id="getByLoginName" resultType="User" parameterType="User">
+	<select id="getByUsername" resultType="User" parameterType="User">
 		SELECT
 			<include refid="userColumns"/>
 		FROM sys_user a
 		<include refid="userJoins"/>
-		WHERE a.login_name = #{loginName} AND a.del_flag = #{DEL_FLAG_NORMAL}
+		WHERE a.username = #{username} AND a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	<!-- 分页查询用户信息 -->
@@ -48,10 +48,10 @@
 		<!--<if test="!currentUser.admin">-->
 			<!--AND a.id != '1'-->
 		<!--</if>-->
-		<if test="loginName != null and loginName != ''">
-			AND a.login_name like 
-					<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
-					<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		<if test="username != null and username != ''">
+			AND a.username like
+					<if test="dbName == 'oracle'">'%'||#{username}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{username}, '%')</if>
 		</if>
 		<if test="name != null and name != ''">
 			AND a.name like 
@@ -116,7 +116,6 @@
 		FROM sys_user a
 		<include refid="userJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
-		ORDER BY c.code, o.code, a.name
 	</select>
 	
 	<!-- 查询全部用户数目 -->
@@ -131,14 +130,14 @@
 	<insert id="insert">
 		INSERT INTO sys_user(
 			id,
-			login_name,
+			username,
 			password,
 			name,
 			phone,
 			del_flag
 		) VALUES (
 			#{id},
-			#{loginName}, 
+			#{username},
 			#{password},
 			#{name},
 			#{phone},
@@ -149,7 +148,7 @@
 	<!-- 更新用户 -->
 	<update id="update">
 		UPDATE sys_user SET
-			login_name = #{loginName}, 
+			username = #{username},
 			password = #{password},
 			name = #{name},
 			phone = #{phone}

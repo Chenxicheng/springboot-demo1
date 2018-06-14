@@ -31,9 +31,22 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="id != null and id != ''">
-				AND
+				AND a.id = #{id}
 			</if>
 		</where>
+	</select>
+
+	<!-- 根据用户id获取该用户所拥有的角色 -->
+	<select id="findRoleListByUserId" resultType="Role">
+		SELECT
+			a.role_id ,
+			r.`name` ,
+			r.cn_name
+		FROM
+			user_role a
+		LEFT JOIN sys_role r ON r.id = a.role_id
+		WHERE
+			a.user_id = #{userId}
 	</select>
 
 	

@@ -11,7 +11,7 @@ public interface UserDao extends CrudDao<User> {
      * @param user
      * @return
      */
-    User getByLoginName(User user);
+    User getByUsername(User user);
 
     /**
      *

@@ -10,7 +10,7 @@ public class User extends DataEntity<User> {
     public static final String SALT = "com.dashwood";
 
     private String name;
-    private String loginName;
+    private String username;
     private String password;
     private String phone;
     private String email;
@@ -34,12 +34,12 @@ public class User extends DataEntity<User> {
         this.name = name;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

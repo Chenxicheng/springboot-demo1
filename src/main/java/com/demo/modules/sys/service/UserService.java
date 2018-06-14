@@ -12,4 +12,16 @@ public interface UserService extends BaseService <User> {
      */
     boolean verifyUserByLoginName (User user);
 
+    /**
+     * 更新用户基本信息，除密码
+     * @param user
+     */
+    void updateUserInfoWithoutPwd (User user);
+
+    /**
+     * 只更新密码
+     * @param user
+     */
+    void updatePassword (User user);
+
 }

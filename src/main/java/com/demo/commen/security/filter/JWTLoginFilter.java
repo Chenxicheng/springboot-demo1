@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.commen.security.jwt.TokenAuthenticationService;
 import com.demo.commen.utils.JSONResult;
+import com.demo.modules.sys.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +37,14 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         // JSON反序列化成 AccountCredentials
-//        AccountCredentials creds = JSON.new ObjectMapper().readValue(req.getInputStream(), AccountCredentials.class);
 
-        String v = IOUtils.toString(req.getInputStream(), "UTF-8").replaceAll("\t", "").replaceAll("\n","");
-        JSONObject json = JSON.parseObject(v);
+        User user = JSON.parseObject(req.getInputStream(), User.class);
 
-        System.out.println(json.toString());
         // 返回一个验证令牌
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        json.getString("loginName"),
-                        json.getString("password")
+                        user.getUsername(),
+                        user.getPassword()
                 )
         );
     }

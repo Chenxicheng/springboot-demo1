@@ -21,8 +21,8 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User u = new User();
-        u.setLoginName(username);
-        User user = userDao.getByLoginName(u);
+        u.setUsername(username);
+        User user = userDao.getByUsername(u);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {
