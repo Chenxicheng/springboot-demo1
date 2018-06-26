@@ -3,10 +3,13 @@ package com.demo.commen.config;
 import com.demo.commen.security.filter.JWTAuthenticationFilter;
 import com.demo.commen.security.filter.JWTLoginFilter;
 import com.demo.commen.security.jwt.CustomAuthenticationProvider;
+import com.demo.commen.security.jwt.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
+
     /**
      * 载BCrypt密码编码器
      * @return
@@ -34,19 +39,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     *
-     * @param authenticationManagerBuilder
-     * @throws Exception
-     */
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                // 设置UserDetailsService
-                .userDetailsService(this.userDetailsService)
-                // 使用BCrypt进行密码的hash
-                .passwordEncoder(passwordEncoder());
+//    @Autowired
+//    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//        authenticationManagerBuilder
+//                // 设置UserDetailsService
+//                .userDetailsService(this.userDetailsService)
+//                // 使用BCrypt进行密码的hash
+//                .passwordEncoder(passwordEncoder());
+//    }
+
+    @Bean
+    public JWTAuthenticationFilter authenticationTokenFilterBean() throws Exception {
+        return new JWTAuthenticationFilter();
     }
+
+    @Bean
+    public JWTLoginFilter loginFilterBean() throws Exception {
+        return new JWTLoginFilter("/login",authenticationManager());
+    }
+
 
     // 设置 HTTP 验证规则
     @Override
@@ -67,19 +78,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 // 添加一个过滤器 所有访问 /login 的请求交给 JWTLoginFilter 来处理 这个类处理所有的JWT相关内容
-                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
+                .addFilterBefore(loginFilterBean(),
                         UsernamePasswordAuthenticationFilter.class)
                 // 添加一个过滤器验证其他请求的Token是否合法
-                .addFilterBefore(new JWTAuthenticationFilter(),
+                .addFilterBefore(authenticationTokenFilterBean(),
                         UsernamePasswordAuthenticationFilter.class);
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        // 使用自定义身份验证组件
-//        auth.authenticationProvider(new CustomAuthenticationProvider());
-//
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // 使用自定义身份验证组件
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+
+    }
 
 
 }

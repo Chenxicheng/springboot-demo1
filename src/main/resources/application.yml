@@ -26,7 +26,8 @@ mybatis:
 
 
 jwt:
-  expirationtime: 432_000_000
+  expiration: 432_000_000
   secret: dashwood
+  loginUrl: /login
 
 

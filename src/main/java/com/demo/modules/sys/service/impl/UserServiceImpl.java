@@ -2,7 +2,9 @@ package com.demo.modules.sys.service.impl;
 
 import com.demo.commen.utils.EncryptionUtils;
 import com.demo.commen.utils.StringUtils;
+import com.demo.modules.sys.dao.RoleDao;
 import com.demo.modules.sys.dao.UserDao;
+import com.demo.modules.sys.entity.Role;
 import com.demo.modules.sys.entity.User;
 import com.demo.modules.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public User get(String id) {
@@ -139,5 +144,23 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         userDao.updatePasswordById(user);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        User user = new User();
+        user.setUsername(username);
+        User u = userDao.getByUsername(user);
+
+        if (u != null) {
+
+            List<Role> roleList = roleDao.findRoleListByUserId(u.getId());
+
+            u.setRoleList(roleList);
+
+            return u;
+        }
+
+        return null;
     }
 }

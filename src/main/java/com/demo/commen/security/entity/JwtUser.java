@@ -36,63 +36,62 @@ public class JwtUser  implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @JsonIgnore
     public String getId() {
-        return id;
+        return this.id;
     }
 
     @JsonIgnore
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     /**
      * 账户是否过期
      * @return
      */
-    @JsonIgnore
+//    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     /**
      * 账户是否未锁定
      * @return
      */
-    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     /**
      * 密码是否未过期
      * @return
      */
-    @JsonIgnore
+//    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     /**
      * 账户是否激活
      * @return
      */
-    @JsonIgnore
+//    @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     // 这个是自定义的，返回上次密码重置日期

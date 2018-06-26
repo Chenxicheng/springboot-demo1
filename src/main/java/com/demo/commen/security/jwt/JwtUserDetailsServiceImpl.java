@@ -3,6 +3,7 @@ package com.demo.commen.security.jwt;
 import com.demo.commen.security.entity.JwtUserFactory;
 import com.demo.modules.sys.dao.UserDao;
 import com.demo.modules.sys.entity.User;
+import com.demo.modules.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,13 +17,11 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsServiceImpl implements UserDetailsService{
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User u = new User();
-        u.setUsername(username);
-        User user = userDao.getByUsername(u);
+        User user = userService.getUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {

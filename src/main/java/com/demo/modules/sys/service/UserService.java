@@ -24,4 +24,11 @@ public interface UserService extends BaseService <User> {
      */
     void updatePassword (User user);
 
+    /**
+     * 根据用户名获取用户信息
+     * @param username
+     * @return
+     */
+    User getUserByUsername (String username);
+
 }

@@ -2,6 +2,7 @@ package com.demo.commen.security.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.demo.commen.security.jwt.JWTUtils;
 import com.demo.commen.security.jwt.TokenAuthenticationService;
 import com.demo.commen.utils.JSONResult;
 import com.demo.modules.sys.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.stereotype.Component;
@@ -22,12 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Autowired
-    private TokenAuthenticationService tokenAuthenticationService;
+    private JWTUtils jwtUtils;
+
+
 
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
@@ -54,7 +59,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletRequest req,
             HttpServletResponse res, FilterChain chain,
             Authentication auth) throws IOException, ServletException {
-        tokenAuthenticationService.addAuthentication(res, auth.getName());
+
+        String token = jwtUtils.generateToken(auth.getName(), (List<SimpleGrantedAuthority>)auth.getAuthorities());
+
+        res.setContentType("application/json");
+        res.setStatus(HttpServletResponse.SC_OK);
+        res.getOutputStream().println(JSONResult.fillResultString(0, "", token));
     }
 
 
